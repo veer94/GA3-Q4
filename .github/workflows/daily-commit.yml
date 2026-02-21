@@ -1,0 +1,29 @@
+name: Daily DevSync Update
+
+on:
+  schedule:
+    # This is cron syntax. It runs at 05:30 UTC every single day.
+    - cron: '30 5 * * *'
+  # This magical line lets us run it manually so we don't have to wait for tomorrow!
+  workflow_dispatch: 
+
+jobs:
+  daily-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Here is your specific email step requested by the assignment!
+      - name: Update daily log by 23f3000375@ds.study.iitm.ac.in
+        run: |
+          echo "Automated daily update on $(date)" >> devsync_daily_log.txt
+          
+          # Tell Git who the robot is
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Add, commit, and push the file
+          git add devsync_daily_log.txt
+          git commit -m "Automated daily update for DevSync"
+          git push
